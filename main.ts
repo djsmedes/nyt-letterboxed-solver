@@ -13,7 +13,7 @@ async function get_words(): Promise<string[]> {
   return (await Deno.readTextFile(WORDS_FILENAME)).split("\n");
 }
 
-async function solve(): Promise<string[][]> {
+export async function solve(letters: readonly string[]): Promise<string[][]> {
   const good_letters = new Set(letters.flatMap((side) => side.split("")));
   const bad_letters = "abcdefghijklmnopqrstuvwxyz".split("").filter((letter) =>
     !good_letters.has(letter)
@@ -66,7 +66,7 @@ async function solve(): Promise<string[][]> {
 }
 
 if (import.meta.main) {
-  const possible_combos = await solve();
+  const possible_combos = await solve(letters);
 
   const flags = parseArgs(Deno.args, {
     boolean: ["answer"],

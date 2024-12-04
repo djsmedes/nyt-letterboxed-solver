@@ -1,12 +1,12 @@
 {
   "tasks": {
-    "dev": "deno run --watch main.ts",
-    "hard": "deno run -A main.ts",
+    "test": "deno test -A",
+    "howhard": "deno run -A main.ts",
     "hint": "deno run -A main.ts --hint=1",
     "hint1": "deno run -A main.ts --hint=1",
     "hint2": "deno run -A main.ts --hint=2",
     "hints": "deno run -A main.ts --hint=1,2",
-    "ans": "deno run -A main.ts --answer"
+    "answer": "deno run -A main.ts --answer"
   },
   "imports": {
     "@std/assert": "jsr:@std/assert@1"
