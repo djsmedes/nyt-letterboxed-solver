@@ -16,17 +16,17 @@ You'll need to install Deno. Do it, it's great. Then you can run any of the
 tasks:
 
 ```shell
-# tells you how many possible words you could use as part of a 2-word solution
-$ deno task howhard
+# tells you how many possible words you could use as the first word of a 2-word solution
+$ deno task howhard --letters=abc,def,ghi,jkl
 
 # tells you the letters you can start the first word with
-$ deno task hint
+$ deno task hint --letters=abc,def,ghi,jkl
 
 # tells you the letters you can start the first and second word with
-$ deno task hints
+$ deno task hints --letters=abc,def,ghi,jkl
 
 # tells you the possible 2-word solutions
-$ deno task answer
+$ deno task answer --letters=abc,def,ghi,jkl
 ```
 
 ## Word List
@@ -42,7 +42,11 @@ Clone SCOWL, run `make`, then run a command like the following to get a base
 wordlist:
 
 ```shell
-./scowl word-list scowl.db --deaccent --categories '' --wo-poses abbr --wo-pos-categories nonword,special,wordpart --apostrophe False --nosuggest  > ../wl.txt
+./scowl word-list scowl.db \
+--deaccent --categories '' \
+--wo-poses abbr --apostrophe False \
+--wo-pos-categories nonword,special,wordpart \
+--nosuggest  > ../wl.txt
 ```
 
 Then you will want to filter your wordlist down a little more, especially

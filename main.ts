@@ -1,12 +1,5 @@
 import { parseArgs } from "jsr:@std/cli/parse-args";
 
-const letters: string[] = [
-  "tgo",
-  "bce",
-  "riu",
-  "vwh",
-];
-
 const WORDS_FILENAME = "wl-nocaps-nodubs.txt";
 
 async function get_words(): Promise<string[]> {
@@ -66,13 +59,14 @@ export async function solve(letters: readonly string[]): Promise<string[][]> {
 }
 
 if (import.meta.main) {
-  const possible_combos = await solve(letters);
-
   const flags = parseArgs(Deno.args, {
     boolean: ["answer"],
-    string: ["hint"],
-    default: { hint: "", answer: false },
+    string: ["hint", "letters"],
+    default: { hint: "", answer: false, letters: "" },
   });
+
+  const letters = flags.letters.split(",");
+  const possible_combos = await solve(letters);
 
   // HINT(ISH) - HOW HARD IS IT?
   if (flags.hint === "" && flags.answer === false) {
