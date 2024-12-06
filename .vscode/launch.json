@@ -9,6 +9,7 @@
       "name": "Launch Program",
       "type": "node",
       "program": "${workspaceFolder}/main.ts",
+      "args": ["--letters="],
       "cwd": "${workspaceFolder}",
       "env": {},
       "runtimeExecutable": "/Users/dan/.deno/bin/deno",

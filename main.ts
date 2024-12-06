@@ -61,8 +61,8 @@ export async function solve(letters: readonly string[]): Promise<string[][]> {
 if (import.meta.main) {
   const flags = parseArgs(Deno.args, {
     boolean: ["answer"],
-    string: ["hint", "letters"],
-    default: { hint: "", answer: false, letters: "" },
+    string: ["hint1", "hint2", "letters"],
+    default: { hint1: "0", hint2: "0", answer: false, letters: "" },
   });
 
   const letters = flags.letters.split(",");
@@ -77,10 +77,11 @@ if (import.meta.main) {
   }
 
   // HINT - WHAT SHOULD FIRST WORD START WITH?
-  if (flags.hint.includes("1")) {
+  const hint1_letters = parseInt(flags.hint1);
+  if (hint1_letters) {
     const possible_first_letters = [
       ...new Set(
-        possible_combos.map(([w1, _w2]) => w1.charAt(0)),
+        possible_combos.map(([w1, _w2]) => w1.slice(0, hint1_letters)),
       ),
     ].toSorted();
     console.log(
@@ -89,10 +90,11 @@ if (import.meta.main) {
   }
 
   // HINT - WHAT SHOULD SECOND WORD START WITH?
-  if (flags.hint.includes("2")) {
+  const hint2_letters = parseInt(flags.hint2);
+  if (hint2_letters) {
     const possible_w2_first_letters = [
       ...new Set(
-        possible_combos.map(([_w1, w2]) => w2.charAt(0)),
+        possible_combos.map(([_w1, w2]) => w2.slice(0, hint2_letters)),
       ),
     ].toSorted();
     console.log(

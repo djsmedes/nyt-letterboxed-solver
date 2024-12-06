@@ -2,10 +2,7 @@
   "tasks": {
     "test": "deno test -A",
     "howhard": "deno run -A main.ts",
-    "hint": "deno run -A main.ts --hint=1",
-    "hint1": "deno run -A main.ts --hint=1",
-    "hint2": "deno run -A main.ts --hint=2",
-    "hints": "deno run -A main.ts --hint=1,2",
+    "hint": "deno run -A main.ts",
     "answer": "deno run -A main.ts --answer"
   },
   "imports": {
