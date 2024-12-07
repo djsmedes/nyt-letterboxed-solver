@@ -1,12 +1,14 @@
 import { parseArgs } from "jsr:@std/cli/parse-args";
 
-const WORDS_FILENAME = "wl-nocaps-nodubs.txt";
+const WORDS_FILENAME = "wl.txt";
 
 async function get_words(): Promise<string[]> {
   return (await Deno.readTextFile(WORDS_FILENAME)).split("\n");
 }
 
-export async function solve(letters: readonly string[]): Promise<string[][]> {
+async function get_possible_words(
+  letters: readonly string[],
+): Promise<string[]> {
   const good_letters = new Set(letters.flatMap((side) => side.split("")));
   const bad_letters = "abcdefghijklmnopqrstuvwxyz".split("").filter((letter) =>
     !good_letters.has(letter)
@@ -23,14 +25,18 @@ export async function solve(letters: readonly string[]): Promise<string[][]> {
     return result;
   });
 
-  const possible_words = (await get_words()).filter((
+  return (await get_words()).filter((
     word,
   ) =>
     [...bad_letters, ...forbidden_bigrams].every((bad_char) =>
       !(word.includes(bad_char))
     )
   );
-  const sorted_possible_words = possible_words.map((
+}
+
+export async function solve(letters: readonly string[]): Promise<string[][]> {
+  const good_letters = new Set(letters.flatMap((side) => side.split("")));
+  const sorted_possible_words = (await get_possible_words(letters)).map((
     word,
   ) => ({ word, uniq: new Set(word.split("")).size })).toSorted((a, b) =>
     b.uniq - a.uniq
@@ -58,18 +64,77 @@ export async function solve(letters: readonly string[]): Promise<string[][]> {
   );
 }
 
+async function get_best_candidates(
+  letters: readonly string[],
+  n: number = 20,
+  must_start?: string,
+  must_end?: string,
+  must_have?: string[],
+): Promise<string[]> {
+  let possible_words = await get_possible_words(letters);
+  if (must_start) {
+    possible_words = possible_words.filter((w) => w.startsWith(must_start));
+  }
+  if (must_end) {
+    possible_words = possible_words.filter((w) => w.endsWith(must_end));
+  }
+  if (must_have) {
+    const must_have_set = new Set(must_have);
+    possible_words = possible_words.filter((w) =>
+      must_have_set.difference(new Set(w.split(""))).size === 0
+    );
+  }
+  possible_words.sort((a, b) =>
+    new Set(b.split("")).size - new Set(a.split("")).size
+  );
+  return possible_words.slice(0, n);
+}
+
+async function checkword(word: string): Promise<boolean> {
+  const all_words = await get_words();
+  return all_words.includes(word);
+}
+
 if (import.meta.main) {
   const flags = parseArgs(Deno.args, {
-    boolean: ["answer"],
-    string: ["hint1", "hint2", "letters"],
-    default: { hint1: "0", hint2: "0", answer: false, letters: "" },
+    boolean: ["answer", "howhard", "candidates"],
+    string: [
+      "hint1",
+      "hint2",
+      "letters",
+      "checkword",
+      "n",
+      "must-start",
+      "must-end",
+      "must-have",
+    ],
+    default: { hint1: "0", hint2: "0", answer: false, letters: "", n: "20" },
   });
 
+  if (flags.checkword) {
+    const is_in_vocab = await checkword(flags.checkword);
+    console.log(`${flags.checkword} in vocab: ${is_in_vocab}`);
+    Deno.exit();
+  }
+
   const letters = flags.letters.split(",");
+
+  if (flags.candidates) {
+    const candidates = await get_best_candidates(
+      letters,
+      parseInt(flags.n),
+      flags["must-start"],
+      flags["must-end"],
+      flags["must-have"]?.split(""),
+    );
+    console.log(JSON.stringify(candidates, null, 2));
+    Deno.exit();
+  }
+
   const possible_combos = await solve(letters);
 
   // HINT(ISH) - HOW HARD IS IT?
-  if (flags.hint === "" && flags.answer === false) {
+  if (flags.howhard) {
     const vocab_size = new Set(possible_combos.map(([w1, _w2]) => w1)).size;
     console.log(
       `Number of possible starting words allowing for 2-word completion: ${vocab_size}`,

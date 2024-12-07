@@ -1,7 +1,7 @@
 {
   "tasks": {
     "test": "deno test -A",
-    "howhard": "deno run -A main.ts",
+    "howhard": "deno run -A main.ts --howhard",
     "hint": "deno run -A main.ts",
     "answer": "deno run -A main.ts --answer"
   },

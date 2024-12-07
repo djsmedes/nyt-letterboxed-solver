@@ -33,8 +33,8 @@ $ deno task answer --letters=abc,def,ghi,jkl
 
 Do note that I'm not using the official word list used by NYT, which is
 proprietary. In fact the word list I'm using isn't even in the repo. In order to
-actually run this, you will need a newline-delimited word list named
-`wl-nocaps-nodubs.txt` in the same directory as the code.
+actually run this, you will need a newline-delimited word list named `wl.txt` in
+the same directory as the code.
 
 I used a wordlist sourced from SCOWL (https://github.com/en-wl/wordlist).
 
@@ -59,5 +59,5 @@ in letterboxed.
 cat wl.txt \
 | grep -Ev "[A-Z]" \
 | grep -Ev "aa|bb|cc|dd|ee|ff|gg|hh|ii|jj|kk|ll|mm|nn|oo|pp|qq|rr|ss|tt|uu|vv|ww|xx|yy|zz" \
-> wl-nocaps-nodubs.txt
+> wl.txt
 ```
