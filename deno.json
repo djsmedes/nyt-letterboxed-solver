@@ -1,9 +1,7 @@
 {
   "tasks": {
     "test": "deno test -A",
-    "howhard": "deno run -A main.ts --howhard",
-    "hint": "deno run -A main.ts",
-    "answer": "deno run -A main.ts --answer"
+    "run": "deno run --allow-read=wl.txt main.ts"
   },
   "imports": {
     "@std/assert": "jsr:@std/assert@1"

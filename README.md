@@ -12,29 +12,39 @@ solver.
 
 ## Running
 
-You'll need to install Deno. Do it, it's great. Then you can run any of the
-tasks:
+First, you will need a newline-delimited word list named `wl.txt` in the same
+directory as the code. See the section below on the method I used to generate my
+word list.
+
+Next, you'll need to install Deno. Do it, it's great. Then you can run the task
+with any command-line arguments you want for various purposes:
 
 ```shell
+# check if a word is in your word list
+$ deno task run --checkword=antiquark
+
 # tells you how many possible words you could use as the first word of a 2-word solution
-$ deno task howhard --letters=abc,def,ghi,jkl
+$ deno task run --letters=abc,def,ghi,jkl --howhard
 
 # tells you the letters you can start the first word with
-$ deno task hint --letters=abc,def,ghi,jkl
+$ deno task run --letters=abc,def,ghi,jkl --hint1=1
 
-# tells you the letters you can start the first and second word with
-$ deno task hints --letters=abc,def,ghi,jkl
+# tells you the 2-letter bigrams you can start the second word with
+$ deno task run --letters=abc,def,ghi,jkl --hint2=2
+
+# get 20 candidate words containing certain letters (combine the "must" flags for fun and profit)
+$ deno task run --letters=abc,def,ghi,jkl --candidates --must-have=jk
+$ deno task run --letters=abc,def,ghi,jkl --candidates --must-start=a
+$ deno task run --letters=abc,def,ghi,jkl --candidates --must-end=b
 
 # tells you the possible 2-word solutions
-$ deno task answer --letters=abc,def,ghi,jkl
+$ deno task run --letters=abc,def,ghi,jkl --answer
 ```
 
 ## Word List
 
 Do note that I'm not using the official word list used by NYT, which is
-proprietary. In fact the word list I'm using isn't even in the repo. In order to
-actually run this, you will need a newline-delimited word list named `wl.txt` in
-the same directory as the code.
+proprietary. In fact the word list I'm using isn't even in the repo.
 
 I used a wordlist sourced from SCOWL (https://github.com/en-wl/wordlist).
 
